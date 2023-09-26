@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{.DefaultWindowTitle}}</title>
+    <base href="https://cdn.jsdelivr.net/npm/altair-static/dist/">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="styles.f034680a7485851d4f48.bundle.css" rel="stylesheet"/>
+</head>
+<body>
+<app-root>
+    <style>
+        .loading-screen {
+            display: none;
+        }
+    </style>
+    <div class="loading-screen styled">
+        <div class="loading-screen-inner">
+            <div class="loading-screen-logo-container">
+                <img src="assets/img/logo_350.svg" alt="Altair">
+            </div>
+            <div class="loading-screen-loading-indicator">
+                <span class="loading-indicator-dot"></span>
+                <span class="loading-indicator-dot"></span>
+                <span class="loading-indicator-dot"></span>
+            </div>
+        </div>
+    </div>
+</app-root>
+<script>
+    const altairSettingsKey = 'altair_settings';
+    const altairWindowsMeta = 'altair_windowsMeta'
+    const altairWindows = 'altair_windows'
+    const defaultWindowId = '0a8ce619-b85f-4a00-9f6c-933e87246588'
+
+    const force = {{jsBool .Force}}
+
+    if (force) {
+        for (const key in localStorage) {
+            if (key.startsWith("altair")) {
+                localStorage.removeItem(key)
+            }
+
+            if (key.startsWith('ab.storage.')) {
+                localStorage.removeItem(key)
+            }
+        }
+    }
+
+    function setInitialKeys(key, settings) {
+        if (force) {
+            localStorage.setItem(key, JSON.stringify(settings))
+        }
+    }
+
+    setInitialKeys(altairSettingsKey, {
+        "isShown": false,
+        "theme": "dark",
+        "language": "en",
+        "addQueryDepthLimit": 3
+    })
+
+    setInitialKeys(altairWindows, {
+        [defaultWindowId]: {
+            "layout": {"isLoading": false, "title": "{{.DefaultWindowTitle}}"},
+            "query": {
+                "url": "{{.Endpoint}}",
+                "subscriptionUrl": "{{getSubscriptionAbsoluteEndpoint .Endpoint}}",
+                "query": "# Enter your graphQL query here.\n",
+                "httpVerb": "POST",
+                "response": null,
+                "responseTime": 0,
+                "responseStatus": 0,
+                "responseStatusText": "",
+                "showUrlAlert": false,
+                "urlAlertMessage": "URL has been set",
+                "urlAlertSuccess": true,
+                "showEditorAlert": false,
+                "editorAlertMessage": "Query is set",
+                "editorAlertSuccess": true,
+                "subscriptionClient": null,
+                "isSubscribed": false,
+                "subscriptionResponseList": []
+            },
+            "headers": {{json .Headers}},
+            "variables": {"variables": "{}"},
+            "dialogs": {
+                "showHeaderDialog": false,
+                "showVariableDialog": false,
+                "showSubscriptionUrlDialog": false,
+                "showHistoryDialog": false
+            },
+            "schema": {"introspection": null, "schema": null, "allowIntrospection": true},
+            "docs": {"showDocs": false, "isLoading": false},
+            "history": {"list": []},
+            "windowId": defaultWindowId
+        }
+
+    })
+
+    setInitialKeys(altairWindowsMeta, {
+        "activeWindowId": defaultWindowId,
+        "windowIds": [defaultWindowId]
+    })
+
+    document.write('<script type="text/javascript" src="inline.318b50c57b4eba3d437b.bundle.js""><\/script>');
+    document.write('<script type="text/javascript" src="polyfills.593898e811a84857f501.bundle.js""><\/script>');
+    document.write('<script type="text/javascript" src="main.48e5705c4e3245d7beae.bundle.js""><\/script>');
+</script>
+</body>
+
+</html>
